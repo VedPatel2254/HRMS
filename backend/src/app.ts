@@ -148,8 +148,8 @@ export const startServer = async (): Promise<void> => {
 
     scheduleLeaveReset();
 
-    const PORT = process.env.PORT || 5000;
-    server.listen(PORT, () => {
+    const PORT = parseInt(process.env.PORT || '5000', 10);
+    server.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
@@ -158,6 +158,14 @@ export const startServer = async (): Promise<void> => {
     process.exit(1);
   }
 };
+
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Rejection:', err);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
 
 process.on('SIGINT', async () => {
   await prisma.$disconnect();
