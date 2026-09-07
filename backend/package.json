@@ -5,8 +5,9 @@
   "main": "dist/app.js",
   "scripts": {
     "dev": "ts-node src/app.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/app.js",
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
