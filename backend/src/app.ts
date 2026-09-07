@@ -45,6 +45,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   /https:\/\/.*\.ngrok-free\.app$/,
   /https:\/\/.*\.ngrok-free\.dev$/,
+  /https:\/\/.*\.vercel\.app$/,
 ];
 
 if (isProduction && process.env.PRODUCTION_URL) {
