@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: prsecurity-postgres
+    environment:
+      POSTGRES_DB: prsecurity_hrms
+      POSTGRES_USER: prsecurity
+      POSTGRES_PASSWORD: prsecurity@123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prsecurity -d prsecurity_hrms"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hrms-network
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: prsecurity-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@prsecurity.in
+      PGADMIN_DEFAULT_PASSWORD: admin@123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - hrms-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  hrms-network:
+    driver: bridge
